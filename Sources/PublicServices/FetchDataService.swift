@@ -15,7 +15,7 @@ enum NetworkError: Error {
     case failedToDecodeResponse
 }
 
-class FetchDataService {
+public class FetchDataService {
 //    @MainActor
 //    func updateDataInDatabase(modelContext: ModelContext) async {
 //        do {
