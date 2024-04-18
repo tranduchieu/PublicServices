@@ -7,7 +7,7 @@
 import Foundation
 import SwiftData
 
-enum NetworkError: Error {
+public enum NetworkError: Error {
     case badUrl
     case invalidRequest
     case badResponse
@@ -30,17 +30,17 @@ public class FetchDataService {
 //        }
 //    }
 
-    func fetchData<T: Codable>(fromUrl: String) async throws -> [T] {
-        guard let downloadedData: [T] = await FetchDataService().downloadData(fromURL: fromUrl) else {return []}
+    public func fetchData<T: Codable>(fromUrl: String) async throws -> [T] {
+        guard let downloadedData: [T] = await downloadData(fromURL: fromUrl) else {return []}
 
         return downloadedData
     }
     
-    enum DateError: String, Error {
+    public enum DateError: String, Error {
         case invalidDate
     }
     
-    func downloadData<T: Codable>(fromURL: String) async -> T? {
+    public func downloadData<T: Codable>(fromURL: String) async -> T? {
         do {
             guard let url = URL(string: fromURL) else { throw NetworkError.badUrl }
             let (data, response) = try await URLSession.shared.data(from: url)
