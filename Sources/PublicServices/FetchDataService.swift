@@ -16,6 +16,8 @@ public enum NetworkError: Error {
 }
 
 public class FetchDataService {
+    public init() {}
+    
 //    @MainActor
 //    func updateDataInDatabase(modelContext: ModelContext) async {
 //        do {
