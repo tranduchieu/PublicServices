@@ -5,7 +5,6 @@
 //  Created by Hieu Tran on 14/04/2024.
 //
 import Foundation
-import SwiftData
 
 public enum NetworkError: Error {
     case badUrl
