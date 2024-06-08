@@ -136,20 +136,39 @@ public func fetchData<T: Codable>(fromURL: String, headers: [String: String]? = 
         // Uncomment this line if you want to use the keyDecodingStrategy
         // decoder.keyDecodingStrategy = .convertFromSnakeCase
         
-        guard let decodedResponse = try? decoder.decode(T.self, from: data) else { throw NetworkError.failedToDecodeResponse }
-        
-        return decodedResponse
+        do {
+            let decodedResponse = try decoder.decode(T.self, from: data)
+            return decodedResponse
+        } catch let decodingError as DecodingError {
+            switch decodingError {
+            case .typeMismatch(let type, let context):
+                print("Type mismatch for type \(type) in context \(context)")
+            case .valueNotFound(let type, let context):
+                print("Value not found for type \(type) in context \(context)")
+            case .keyNotFound(let key, let context):
+                print("Key '\(key.stringValue)' not found in context \(context)")
+            case .dataCorrupted(let context):
+                print("Data corrupted in context \(context)")
+            @unknown default:
+                print("Unknown decoding error: \(decodingError)")
+            }
+            throw NetworkError.failedToDecodeResponse
+        }
     } catch NetworkError.badUrl {
         print("There was an error creating the URL")
+        throw NetworkError.badUrl
     } catch NetworkError.badResponse {
         print("Did not get a valid response")
+        throw NetworkError.badResponse
     } catch NetworkError.badStatus {
         print("Did not get a 2xx status code from the response")
+        throw NetworkError.badStatus
     } catch NetworkError.failedToDecodeResponse {
         print("Failed to decode response into the given type")
+        throw NetworkError.failedToDecodeResponse
     } catch {
-        print("An error occurred downloading the data")
+        print("An error occurred downloading the data: \(error)")
+        throw error
     }
     
-    return nil
 }
