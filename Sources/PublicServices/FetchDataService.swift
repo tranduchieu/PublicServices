@@ -71,6 +71,12 @@ public class FetchDataService {
                 if let date = formatter.date(from: dateStr) {
                     return date
                 }
+                
+                formatter.dateFormat = "HH:mm:ss"
+                if let date = formatter.date(from: dateStr) {
+                    return date
+                }
+                
                 throw DateError.invalidDate
             })
             
